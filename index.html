@@ -2,22 +2,43 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <title>IFC Viewer</title>
+    <title>IFC 3D Viewer</title>
     <style>
-        body { margin: 0; overflow: hidden; }
-        #viewer { width: 100vw; height: 100vh; background-color: #f0f0f0; }
+        body { margin: 0; padding: 0; overflow: hidden; }
+        #viewer { width: 100vw; height: 100vh; }
     </style>
 </head>
 <body>
     <div id="viewer"></div>
 
     <script type="module">
-        // Menggunakan library yang lebih spesifik untuk viewer
-        import * as OBC from 'https://cdn.jsdelivr.net/npm/@thatopen/fragments@0.0.10/+esm';
+        import * as OBC from 'https://unpkg.com/@thatopen/components@0.8.0/dist/index.js';
 
-        // Kalau cara ini masih error, masalahnya ada di link CDN-nya.
-        // Tapi untuk sementara, coba ini dulu ya.
-        console.log("Library berhasil dimuat!");
+        const container = document.getElementById("viewer");
+        const components = new OBC.Components();
+        const worlds = components.get(OBC.Worlds);
+        const world = worlds.create();
+        
+        world.scene = new OBC.SimpleScene(components);
+        world.renderer = new OBC.SimpleRenderer(components, container);
+        world.camera = new OBC.SimpleCamera(components);
+        
+        components.init();
+        world.camera.controls.setLookAt(10, 10, 10, 0, 0, 0);
+        world.scene.setup();
+
+        const fragments = components.get(OBC.FragmentsManager);
+
+        // Langsung panggil model.ifc yang baru
+        async function loadIfc() {
+            const response = await fetch("model.ifc");
+            const data = await response.arrayBuffer();
+            const buffer = new Uint8Array(data);
+            await fragments.load(buffer);
+            console.log("Model dimuat!");
+        }
+
+        loadIfc();
     </script>
 </body>
 </html>
