@@ -2,7 +2,7 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <title>IFC 3D Viewer</title>
+    <title>IFC Viewer</title>
     <style>
         body { margin: 0; overflow: hidden; }
         #viewer { width: 100vw; height: 100vh; background-color: #f0f0f0; }
@@ -12,10 +12,12 @@
     <div id="viewer"></div>
 
     <script type="module">
-        import * as OBC from 'https://cdn.jsdelivr.net/npm/@thatopen/components@0.0.0-next.60/+esm';
+        // Menggunakan library ThatOpen yang lebih umum
+        import * as OBC from 'https://cdn.jsdelivr.net/npm/@thatopen/components@0.8.0/+esm';
 
         const container = document.getElementById("viewer");
         const components = new OBC.Components();
+        
         const worlds = components.get(OBC.Worlds);
         const world = worlds.create();
         
@@ -30,15 +32,21 @@
         const fragments = components.get(OBC.FragmentsManager);
 
         async function loadIfc() {
-            // Karena nama file kamu Project2 f'c 35_detached.ifc
-            // Kita coba pakai encodeURI agar spasi dan petik aman dibaca web
-            const fileName = "Project2 f'c 35_detached.ifc";
-            const response = await fetch(encodeURI(fileName));
-            const data = await response.arrayBuffer();
-            const buffer = new Uint8Array(data);
-            
-            const model = await fragments.load(buffer);
-            console.log("Model berhasil dimuat:", model);
+            try {
+                // Nama file harus sama persis dengan yang ada di GitHub
+                const fileName = "Project2 f'c 35_detached.ifc";
+                const response = await fetch(fileName);
+                
+                if (!response.ok) throw new Error("Gagal mengambil file IFC");
+                
+                const data = await response.arrayBuffer();
+                const buffer = new Uint8Array(data);
+                
+                await fragments.load(buffer);
+                console.log("Model berhasil dimuat!");
+            } catch (err) {
+                console.error("Error saat load model:", err);
+            }
         }
 
         loadIfc();
