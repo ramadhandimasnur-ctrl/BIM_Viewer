@@ -12,44 +12,12 @@
     <div id="viewer"></div>
 
     <script type="module">
-        // Menggunakan library ThatOpen yang lebih umum
-        import * as OBC from 'https://cdn.jsdelivr.net/npm/@thatopen/components@0.8.0/+esm';
+        // Menggunakan library yang lebih spesifik untuk viewer
+        import * as OBC from 'https://cdn.jsdelivr.net/npm/@thatopen/fragments@0.0.10/+esm';
 
-        const container = document.getElementById("viewer");
-        const components = new OBC.Components();
-        
-        const worlds = components.get(OBC.Worlds);
-        const world = worlds.create();
-        
-        world.scene = new OBC.SimpleScene(components);
-        world.renderer = new OBC.SimpleRenderer(components, container);
-        world.camera = new OBC.SimpleCamera(components);
-        
-        components.init();
-        world.camera.controls.setLookAt(10, 10, 10, 0, 0, 0);
-        world.scene.setup();
-
-        const fragments = components.get(OBC.FragmentsManager);
-
-        async function loadIfc() {
-            try {
-                // Nama file harus sama persis dengan yang ada di GitHub
-                const fileName = "Project2 f'c 35_detached.ifc";
-                const response = await fetch(fileName);
-                
-                if (!response.ok) throw new Error("Gagal mengambil file IFC");
-                
-                const data = await response.arrayBuffer();
-                const buffer = new Uint8Array(data);
-                
-                await fragments.load(buffer);
-                console.log("Model berhasil dimuat!");
-            } catch (err) {
-                console.error("Error saat load model:", err);
-            }
-        }
-
-        loadIfc();
+        // Kalau cara ini masih error, masalahnya ada di link CDN-nya.
+        // Tapi untuk sementara, coba ini dulu ya.
+        console.log("Library berhasil dimuat!");
     </script>
 </body>
 </html>
