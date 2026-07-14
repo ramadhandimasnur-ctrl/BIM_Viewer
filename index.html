@@ -12,7 +12,7 @@
     <div id="viewer"></div>
 
     <script type="module">
-        import * as OBC from 'https://cdn.jsdelivr.net/npm/@thatopen/components@0.8.0/+esm';
+        import * as OBC from 'https://cdn.jsdelivr.net/npm/@thatopen/components@0.0.0-next.60/+esm';
 
         const container = document.getElementById("viewer");
         const components = new OBC.Components();
@@ -28,12 +28,12 @@
         world.scene.setup();
 
         const fragments = components.get(OBC.FragmentsManager);
-        const fileFetcher = components.get(OBC.IfcJsonExporter); // Hanya contoh inisialisasi
 
         async function loadIfc() {
-            // Menggunakan encodeURIComponent untuk menangani spasi dan karakter khusus di nama file
-            const url = encodeURIComponent("Project2 f'c 35_detached.ifc");
-            const response = await fetch(url);
+            // Karena nama file kamu Project2 f'c 35_detached.ifc
+            // Kita coba pakai encodeURI agar spasi dan petik aman dibaca web
+            const fileName = "Project2 f'c 35_detached.ifc";
+            const response = await fetch(encodeURI(fileName));
             const data = await response.arrayBuffer();
             const buffer = new Uint8Array(data);
             
